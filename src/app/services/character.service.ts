@@ -3,36 +3,28 @@ import { Observable, map, of } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { Character } from '../models/character.model';
 import { HttpClient } from '@angular/common/http';
-import { ListResponse } from '../models/list-response.model';\
-import { Md5 } from 'ts-md5';
+import { Data, ListResponse } from '../models/list-response.model';
 
 @Injectable()
 export class CharacterService {
-  private publicKey = '';
-  private privateKey = '';
-  private url = '';
+  private readonly publicKey: string;
+  private readonly url: string;
 
   constructor(
     private readonly http: HttpClient,
   ) {
     this.url = environment.marvel.url;
     this.publicKey = environment.marvel.publicKey;
-    this.privateKey = environment.marvel.privateKey;
   }
-
 
   public getCharacters(
     nameStartsWith: string,
     limit: number,
     offset: number
-  ): Observable<Character[]> {
-    const ts = new Date().getTime();
-    const hash = Md5.hashStr(`${ts}${this.privateKey}${this.publicKey}`);
+  ): Observable<Data<Character>> {
     const options = {
       params: {
-        ts,
         apikey: this.publicKey,
-        hash,
         nameStartsWith,
         limit,
         offset,
@@ -41,7 +33,7 @@ export class CharacterService {
 
     return this.http.get<ListResponse<Character>>(`${this.url}/characters`, options)
       .pipe(
-        map(response => response.data.results)
+        map(response => response.data)
       );
   }
 }
