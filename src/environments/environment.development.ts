@@ -3,6 +3,6 @@ export const environment = {
   marvel: {
     publicKey: '1234',
     privateKey: '1234',
-    url: 'https://gateway.marvel.com:443/v1/public/characters',
+    url: 'https://gateway.marvel.com:443/v1/public',
   },
 };

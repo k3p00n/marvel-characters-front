@@ -1,0 +1,18 @@
+<input
+  class="search-input"
+  placeholder="start typing to search"
+  [(ngModel)]="searchString"
+  (ngModelChange)="this.searchStringUpdate$.next($event)"
+  type="text"
+/>
+<ul
+  *ngIf="searchResults.length"
+  class="search-results"
+  infiniteScroll
+  (scrolled)="onScrollDown()"
+  [scrollWindow]="false"
+>
+  <li *ngFor="let i of searchResults">
+    <p (click)="selectData(i)">{{ i }}</p>
+  </li>
+</ul>
